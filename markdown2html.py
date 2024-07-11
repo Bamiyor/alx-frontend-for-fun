@@ -2,7 +2,21 @@
 
 import sys
 import os
-import markdown
+
+def convert_markdown_to_html(markdown_content):
+    lines = markdown_content.split('\n')
+    html_lines = []
+    
+    for line in lines:
+        if line.startswith('#'):
+            heading_level = len(line.split(' ')[0])
+            heading_text = line[heading_level:].strip()
+            html_line = f"<h{heading_level}>{heading_text}</h{heading_level}>"
+            html_lines.append(html_line)
+        else:
+            html_lines.append(line)
+
+    return '\n'.join(html_lines)
 
 def main():
     if len(sys.argv) != 3:
@@ -19,7 +33,7 @@ def main():
     with open(input_file, 'r', encoding='utf-8') as f:
         markdown_content = f.read()
     
-    html_content = markdown.markdown(markdown_content)
+    html_content = convert_markdown_to_html(markdown_content)
 
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write(html_content)
